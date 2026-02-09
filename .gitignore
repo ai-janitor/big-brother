@@ -9,3 +9,4 @@ build/
 venv/
 .tox/
 .mypy_cache/
+uv.lock
