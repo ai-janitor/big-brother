@@ -28,7 +28,7 @@ import sys
 from big_brother._scanner import scan
 from big_brother._report import print_laws, print_report
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = ["main", "scan", "print_report", "print_laws", "stub"]
 
 

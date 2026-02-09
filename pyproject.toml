@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "py-big-brother"
-version = "0.1.0"
+version = "0.2.0"
 description = "AI-first Python code structure enforcer — 1 file, 1 function"
 readme = "README.md"
 license = "MIT"
