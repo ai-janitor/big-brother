@@ -1,11 +1,14 @@
-"""Extract public functions from a file into a 1-file-1-function package.
+"""Extract public logic (functions, async functions, classes) into a 1-file-1-def package.
 
-Reads the source, uses AST to identify public functions and their
+Reads the source, uses AST to identify public defs and their
 dependencies (imports, constants, private helpers), then writes each
-function to its own file with only the imports it needs.
+def to its own file with only the imports it needs.
+
+"Logic" = any top-level def, async def, or class whose name doesn't
+start with underscore — same definition the scanner uses.
 
 Auto-fixes:
-- Cross-imports between sibling public functions
+- Cross-imports between sibling public defs
 - Shared helpers extracted to _helpers.py (no duplication)
 - SCRIPT_DIR depth adjustment for package nesting
 """
@@ -38,9 +41,9 @@ def stub(source_path, output_dir=None):
         output_dir = base
     output_dir = os.path.abspath(output_dir)
 
-    pub_fns = _find_public_functions(tree)
+    pub_fns = _find_public_logic(tree)
     if len(pub_fns) <= 1:
-        print(f"{source_path}: only {len(pub_fns)} public function(s), nothing to stub")
+        print(f"{source_path}: only {len(pub_fns)} public def(s), nothing to stub")
         return
 
     priv_fns = _find_private_functions(tree)
@@ -226,10 +229,11 @@ def stub(source_path, output_dir=None):
     report.print_report(len(written_files), output_dir, basename)
 
 
-def _find_public_functions(tree):
+def _find_public_logic(tree):
+    """Public functions, async functions, and classes — same as the scanner."""
     return [
         n for n in ast.iter_child_nodes(tree)
-        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
         and not n.name.startswith("_")
     ]
 
@@ -427,7 +431,7 @@ class _StubReport:
         self.subprocess_refs = []      # filenames with subprocess calls to original
 
     def print_report(self, num_files, output_dir, basename):
-        print(f"\nStubbed {num_files} functions into {output_dir}/")
+        print(f"\nStubbed {num_files} defs into {output_dir}/")
 
         if self.cross_imports:
             print(f"\n  Auto cross-imports ({len(self.cross_imports)}):")

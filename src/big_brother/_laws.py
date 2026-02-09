@@ -14,7 +14,25 @@ SKIP_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules", ".tox", ".m
 # Printed at the top of every scan so the subject knows what
 # they're being measured against. No secret rules.
 LAWS = [
-    "One public function per .py file",
+    "One unit of logic per .py file (function or class)",
+    "Cohesive small modules may stay together — vet with '# bb:vetted'",
     "__init__.py with re-exports must have __all__",
     "Entry files ≤3 non-main defs",
+]
+
+# When to vet: guidance for AI gatekeepers deciding cohesion.
+COHESION_CRITERIA = [
+    "Functions are always modified together",
+    "Functions are meaningless apart",
+    "File is under ~300 LOC",
+]
+
+# Principles — how to organize, not just what to flag.
+# Printed so any AI agent reading bb output knows the philosophy.
+PRINCIPLES = [
+    "Design your files well — exceptions only for cohesiveness, and even then rare",
+    "Folder paths give you free relationships — exploit that for organization",
+    "Comments convey meaning — meaning is much less fragile than code",
+    "Descriptive filenames over short ones — long_descriptive_name.py is fine",
+    "This is not for you, point-and-click IDE humans — this is for agents",
 ]
