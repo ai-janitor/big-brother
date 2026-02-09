@@ -18,5 +18,8 @@ classifiers = [
     "Topic :: Software Development :: Quality Assurance",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/big_brother"]
+
 [project.scripts]
 big-brother = "big_brother:main"
